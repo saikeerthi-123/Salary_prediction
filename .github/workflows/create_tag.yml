@@ -1,7 +1,7 @@
 name: Tag Trigger
 
 on:
-  create:
+  push:
     tags:
       - '*'
 
