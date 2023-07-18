@@ -1,0 +1,17 @@
+name: Tag Trigger
+
+on:
+  create:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Display tag name
+        run: echo "The created tag is ${{ github.ref }}"
