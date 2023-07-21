@@ -1,0 +1,47 @@
+name: Build wheel on creating tag
+
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: [self-hosted, dev]
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history and tags
+
+      - name: Setup python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9 #install the python version needed
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel
+          pip install pkutils
+          pip install pytest
+          if [ -f requirement.txt ]; then pip install -r requirement.txt; fi
+      - name: Check Linting
+        continue-on-error: true
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          src: "./aimlp_feature_generation ./test"
+          version: "22.3.0"
+      - name: Test with pytest
+        run: |
+          python -m pytest test
+
+      - name: Build wheel
+        run: |
+          python setup.py bdist_wheel
+
+      - name: Create GitHub Release
+        id: upload_release
+        run: |
+          gh release create ${{ steps.create_release.outputs.tag }} dist/*.whl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
