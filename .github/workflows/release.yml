@@ -36,7 +36,7 @@ jobs:
           python setup.py sdist bdist_wheel
       - name: Set Asset Path
         id: set_asset_path
-        run: echo "::set-output name=asset_path::/Users/saikeerthi/Downloads/Salary Prediction Based on work experience ML Web App/dist/*.whl"
+        run: echo "::set-output name=asset_path::/dist/*.whl"
       - name: Extract Asset Name
         id: extract_asset_name
         run: |
