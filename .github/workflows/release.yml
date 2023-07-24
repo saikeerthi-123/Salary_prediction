@@ -42,15 +42,10 @@ jobs:
           echo "Found wheel file: $WHEEL_FILE"
           echo "::set-output name=wheel_file::$WHEEL_FILE"
 
-      - name: Read Package Name from setup.py
-        id: read_package_name
-        run: python get_package_name.py
-        continue-on-error: true
-
       - name: Set Package Name
         id: set_package_name
         run: |
-          PACKAGE_NAME=$(python get_package_name.py)
+          PACKAGE_NAME=$(python get_whl_file_name.py)
           echo "::set-output name=package_name::$PACKAGE_NAME"
       - name: Upload Release Asset
         id: upload-release-asset
@@ -58,5 +53,5 @@ jobs:
         with:
           upload_url: "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets?name=${{ steps.set_package_name.outputs.package_name }}.whl"
           asset_path: ${{ steps.Find_Wheel_File.outputs.wheel_file }}
-          asset_name: ${{ steps.set_package_name.outputs.package_name }}.whl
+          asset_name: ${{ steps.set_package_name.outputs.package_name }}
           asset_content_type: application/octet-stream
