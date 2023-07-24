@@ -50,10 +50,7 @@ jobs:
       - name: Read Package Name from setup.py
         id: read_package_name
         run: |
-          PACKAGE_NAME=$(python -c "import setuptools; \
-                       with open('setup.py') as f: \
-                       exec(f.read(), globals()) \
-                       print(setuptools.find_packages()[0])")
+          PACKAGE_NAME=$(grep -oP "(?<=name=')[^']+" setup.py)
           echo "::set-output name=package_name::$PACKAGE_NAME"
       - name: Upload Release Asset
         id: upload-release-asset
