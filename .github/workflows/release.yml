@@ -53,7 +53,7 @@ jobs:
           PACKAGE_NAME=$(python -c "import setuptools; \
                        with open('setup.py') as f: \
                        exec(f.read(), globals()) \
-                       print(setuptools.find_packages())")
+                       print(setuptools.find_packages()[0])")
           echo "::set-output name=package_name::$PACKAGE_NAME"
       - name: Upload Release Asset
         id: upload-release-asset
