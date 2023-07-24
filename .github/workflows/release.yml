@@ -54,6 +54,6 @@ jobs:
 
       - name: Upload Release Asset
         run: |
-        UPLOAD_URL="https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release_id.outputs.release_id }}/assets?name=$(basename '${{ steps.Find_Wheel_File.outputs.wheel_file }}')"
-        echo "Uploading asset to $UPLOAD_URL"
-        curl -XPOST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/octet-stream" --data-binary "@${{ steps.Find_Wheel_File.outputs.wheel_file }}" "$UPLOAD_URL"
+          UPLOAD_URL="https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release_id.outputs.release_id }}/assets?name=$(basename '${{ steps.Find_Wheel_File.outputs.wheel_file }}')"
+          echo "Uploading asset to $UPLOAD_URL"
+          curl -XPOST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/octet-stream" --data-binary "@${{ steps.Find_Wheel_File.outputs.wheel_file }}" "$UPLOAD_URL"
