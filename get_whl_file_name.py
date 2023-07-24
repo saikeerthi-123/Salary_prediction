@@ -21,6 +21,6 @@ if __name__ == "__main__":
         setup_content = setup_file.read()
         try:
             whl_file_name = get_whl_file_name_from_setup(setup_content)
-            print(f"Wheel file name: {whl_file_name}")
+            print(whl_file_name)
         except Exception as e:
             print(f"Error: {e}")
