@@ -36,6 +36,7 @@ jobs:
           python setup.py sdist bdist_wheel
 
       - name: Find Wheel File
+        id: find_wheel_file
         run: |
             WHEEL_FILE=$(find ./dist -type f -name "*.whl")
             echo "Found wheel file: $WHEEL_FILE"
@@ -56,6 +57,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release_id.outputs.release_id }}/assets?name=${{ steps.Find_Wheel_File.outputs.wheel_file }}"
-          asset_path: ${{ steps.Find_Wheel_File.outputs.wheel_file }}
+          asset_path: ${{ steps.find_wheel_file.outputs.wheel_file }}
           asset_name: ${{ steps.extract_asset_name.outputs.asset_name }}
           asset_content_type: application/octet-stream
