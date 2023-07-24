@@ -50,7 +50,8 @@ jobs:
       - name: Extract Asset Name
         id: extract_asset_name
         run: |
-          echo "::set-output name=asset_name::$(unzip -l ${{ steps.Find_Wheel_File.outputs.wheel_file }} | grep -oP '(?<=inflating: )[^/]+')"
+          ASSET_NAME=$(unzip -l ${{ steps.Find_Wheel_File.outputs.wheel_file }} | sed -n '4p' | awk '{ print $4 }')
+          echo "::set-output name=asset_name::$ASSET_NAME"
       - name: Create Release Asset
         id: create_release_asset
         uses: actions/upload-artifact@v2
