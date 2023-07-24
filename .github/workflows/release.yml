@@ -34,37 +34,22 @@ jobs:
       - name: Build wheel
         run: |
           python setup.py sdist bdist_wheel
-      - name: Set Asset Path
-        id: set_asset_path
-        run: echo "::set-output name=asset_path::/dist/*.whl"
+
+      - name: Find Wheel File
+        run: |
+            WHEEL_FILE=$(find ./dist -type f -name "*.whl")
+            echo "Found wheel file: $WHEEL_FILE"
+            echo "::set-output name=wheel_file::$WHEEL_FILE"
       - name: Extract Asset Name
         id: extract_asset_name
         run: |
-          asset_path="${{ steps.set_asset_path.outputs.asset_path }}"
-          asset_name=$(basename "$asset_path")
-          echo "::set-output name=asset_name::$asset_name"
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          echo "::set-output name=asset_name::$(unzip -l ${{ steps.Find_Wheel_File.outputs.wheel_file }} | grep -oP '(?<=inflating: )[^/]+')"
 
-      - name: Upload WHL as Asset
-        id: upload_asset
+      - name: Upload Release Asset
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.set_asset_path.outputs.asset_path }}
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.Find_Wheel_File.outputs.wheel_file }}
           asset_name: ${{ steps.extract_asset_name.outputs.asset_name }}
           asset_content_type: application/octet-stream
-
-      - name: Display Asset URL
-        run: |
-          echo "Asset URL: ${{ steps.upload_asset.outputs.browser_download_url }}"
