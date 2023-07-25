@@ -46,6 +46,7 @@ jobs:
         id: set_package_name
         run: |
           PACKAGE_NAME=$(python get_whl_file_name.py)
+          echo "Found package name: $PACKAGE_NAME"
           echo "::set-output name=package_name::$PACKAGE_NAME"
 
       - name: Create Release
