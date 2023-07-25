@@ -44,8 +44,6 @@ jobs:
 
       - name: Get Release ID
         id: get_release_id
-        with:
-          tag_name: ${{ github.event.release.tag_name }}
         run: |
           tag_name_1=$(git tag --points-at ${{ github.sha }})
           tag_name_2=${{ github.event.release.tag_name }}
