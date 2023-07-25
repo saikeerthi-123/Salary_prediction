@@ -45,7 +45,9 @@ jobs:
       - name: Get Release ID
         id: get_release_id
         run: |
-          tag_name_1=$(git tag --points-at ${{ github.sha }})
-          tag_name_2=${{ github.event.release.tag_name }}
-          echo "Tag name 1: $tag_name_1"
-          echo "Tag name 2: $tag_name_2"
+          tag_name=$(git tag --points-at ${{ github.sha }})
+          access_token=${{ secrets.GITHUB_TOKEN }}
+          api_url="https://api.github.com/repos/${{ github.repository }}/releases/tags/$tag_name"
+          release_id=$(curl -s -H "Authorization: Bearer $secrets.PAT_TOKEN" "$api_url" | jq -r '.id')
+          echo "Release ID: $release_id"
+          echo "::set-output name=release_id::$release_id"
