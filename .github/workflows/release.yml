@@ -48,6 +48,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag_name=$(git tag --points-at ${{ github.sha }})
-          release_id=$(gh release list -R ${{ github.repository }} --json id,name --jq ".[] | select(.name==\"$tag_name\") | .id")
+          release_id=$(gh release list --exclude-pre-releases ${{ github.repository }} --json id,name --jq ".[] | select(.name==\"$tag_name\") | .id")
           echo "Release ID: $release_id"
           echo "::set-output name=release_id::$release_id"
