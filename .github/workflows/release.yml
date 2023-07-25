@@ -42,12 +42,30 @@ jobs:
           echo "Found wheel file: $WHEEL_FILE"
           echo "::set-output name=wheel_file::$WHEEL_FILE"
 
-      - name: Get Release ID
-        id: get_release_id
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Set Package Name
+        id: set_package_name
         run: |
-          tag_name=$(git tag --points-at ${{ github.sha }})
-          release_id=$(gh release list --exclude-pre-releases ${{ github.repository }} --json id,name --jq ".[] | select(.name==\"$tag_name\") | .id")
-          echo "Release ID: $release_id"
-          echo "::set-output name=release_id::$release_id"
+          PACKAGE_NAME=$(python get_whl_file_name.py)
+          echo "::set-output name=package_name::$PACKAGE_NAME"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.Find_Wheel_File.outputs.wheel_file }}
+          asset_name: ${{ steps.set_package_name.outputs.package_name }}
+          asset_content_type: application/octet-stream
