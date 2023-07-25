@@ -44,6 +44,8 @@ jobs:
 
       - name: Get Release ID
         id: get_release_id
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           tag_name=$(git tag --points-at ${{ github.sha }})
           release_id=$(gh release view $tag_name -R ${{ github.repository }} --json id --jq .id)
