@@ -46,8 +46,6 @@ jobs:
         id: get_release_id
         run: |
           tag_name=$(git tag --points-at ${{ github.sha }})
-          access_token=${{ secrets.GITHUB_TOKEN }}
-          api_url="https://api.github.com/repos/${{ github.repository }}/releases/tags/$tag_name"
-          release_id=$(curl -s "$api_url" | jq -r '.id')
+          release_id=$(gh release view $tag_name -R ${{ github.repository }} --json id --jq .id)
           echo "Release ID: $release_id"
           echo "::set-output name=release_id::$release_id"
