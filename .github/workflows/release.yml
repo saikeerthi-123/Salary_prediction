@@ -33,7 +33,7 @@ jobs:
           version: "22.3.0"
       - name: Build wheel
         run: |
-          python setup.py sdist bdist_wheel
+          python setup.py bdist_wheel
 
       - name: Find Wheel File
         id: find_wheel_file
