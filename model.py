@@ -34,7 +34,7 @@ pickle.dump(regressor, open('model.pkl','wb'))
 
 # Loading model to compare the results
 model = pickle.load( open('model.pkl','rb'))
-print(model.predict([[1.9]]))
+print(model.predict([[1.3]]))
 print("just")
 print("for")
 print("fun - test branch")
