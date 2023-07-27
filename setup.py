@@ -8,7 +8,6 @@ os.chdir(str(root))
 tag_name = os.environ.get('GITHUB_REF', '')
 
 def get_version(tag_name):
-    # Extract the version number from the tag name
     version = tag_name.replace('refs/tags/v', '')
     return version
 
