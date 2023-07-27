@@ -8,7 +8,9 @@ os.chdir(str(root))
 setup(
     name='salary_prediction',
     packages=find_packages(include=['salary_prediction']),
-    version='0.2.1',
+    tag_name=os.environ.get('GITHUB_REF', ''),
+    version=tag_name.replace('refs/tags/v', ''),
+    # version='0.2.1',
     description='Feature salary prediction',
     author='sai keerthi',
     license='MIT',
