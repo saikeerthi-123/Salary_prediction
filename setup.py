@@ -5,11 +5,17 @@ import os
 root = pathlib.Path(__file__).parent
 os.chdir(str(root))
 
+tag_name = os.environ.get('GITHUB_REF', '')
+
+def get_version(tag_name):
+    # Extract the version number from the tag name
+    version = tag_name.replace('refs/tags/v', '')
+    return version
+
 setup(
     name='salary_prediction',
     packages=find_packages(include=['salary_prediction']),
-    tag_name=os.environ.get('GITHUB_REF', ''),
-    version=tag_name.replace('refs/tags/v', ''),
+    version=get_version(tag_name),
     # version='0.2.1',
     description='Feature salary prediction',
     author='sai keerthi',
