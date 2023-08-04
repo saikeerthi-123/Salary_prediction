@@ -9,6 +9,7 @@ tag_name = os.environ.get('GITHUB_REF', '')
 
 def get_version(tag_name):
     version = tag_name.replace('refs/tags/v', '')
+    print(version)
     return version
 
 setup(
